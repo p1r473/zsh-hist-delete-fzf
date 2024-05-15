@@ -1,2 +1,2 @@
 # zsh-hist-delete-fzf
-Delete history from zsh hist fzf
+Delete history items for ZSH's FZF Ctrl+R History Search
