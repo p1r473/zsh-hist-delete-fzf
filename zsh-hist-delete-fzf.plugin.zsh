@@ -3,15 +3,15 @@ hist_delete_fzf() {
   local -a ignore
   fc -pa "$HISTFILE"
   if type bat >/dev/null 2>&1; then
-  selection=$(fc -rt '%Y-%m-%d %H:%M' -l 1  |
+    selection=$(fc -rt '%Y-%m-%d %H:%M' -l 1  |
       awk '{ cmd=$0; if (!seen[cmd]++) print $0}' |
       bat --color=always --plain --language sh |
       fzf --bind 'enter:become:echo {+f1}' --header='Press enter to remove; escape to exit' --height=100% --preview-window 'hidden:down:border-top:wrap:<70(hidden)' --prompt='Global History > ' --with-nth=2.. --ansi --preview 'bat --color=always --plain --language sh <<< {2..}' )
-  else
-  selection=$(fc -rt '%Y-%m-%d %H:%M' -l 1  |
+    else
+      selection=$(fc -rt '%Y-%m-%d %H:%M' -l 1  |
       awk '{ cmd=$0; if (!seen[cmd]++) print $0}' |
       fzf --bind 'enter:become:echo {+f1}' --header='Press enter to remove; escape to exit' --height=100% --preview-window 'hidden:down:border-top:wrap:<70(hidden)' --prompt='Global History > ' --with-nth=2.. )
-  fi
+    fi
 
   if [ -n "$selection" ]; then
     while IFS= read -r line; do ignore+=("${(b)history[$line]}"); done < "$selection"
@@ -85,12 +85,12 @@ export FZF_CTRL_R_OPTS
 #Reference https://github.com/junegunn/fzf/issues/3522
 #BW
 # export FZF_CTRL_R_OPTS="$(
-# 	cat <<'FZF_FTW'
+#   cat <<'FZF_FTW'
 # --bind "ctrl-d:execute-silent(zsh -ic 'fc -pa $HISTFILE; for i in {+1}; do ignore+=( \"${(b)history[$i]}\" );done;HISTORY_IGNORE=\"(${(j:|:)ignore})\";fc -W')+reload:fc -pa $HISTFILE; fc -rl 1 |
-# 	awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, \"\", cmd); if (!seen[cmd]++) print $0 }'"
+#   awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, \"\", cmd); if (!seen[cmd]++) print $0 }'"
 # --bind "start:reload:fc -pa $HISTFILE; fc -rl 1 |
-# 	awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, \"\", cmd); if (!seen[cmd]++) print $0 }'"
-# --header 'enter select · ^d remove'
+#   awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, \"\", cmd); if (!seen[cmd]++) print $0 }'"
+# --header 'enter select Â· ^d remove'
 # --height 70%
 # --preview-window 'hidden:down:border-top:wrap:<70(hidden)'
 # --prompt ' Global History > '
@@ -100,16 +100,16 @@ export FZF_CTRL_R_OPTS
 
 #Color
 # export FZF_CTRL_R_OPTS="$(
-# 	cat <<'FZF_FTW'
-# 	--ansi
+#   cat <<'FZF_FTW'
+#   --ansi
 # --bind "ctrl-d:execute-silent(zsh -ic 'fc -pa $HISTFILE; for i in {+1}; do ignore+=( \"${(b)history[$i]}\" );done;
-# 	HISTORY_IGNORE=\"(${(j:|:)ignore})\";fc -W')+reload:fc -pa $HISTFILE; fc -rl 1 |
-# 	awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, \"\", cmd); if (!seen[cmd]++) {printf \"%-10s\", $1; $1=\"\"; print $0} }' |
-# 	bat --color=always --plain --language sh"
+#   HISTORY_IGNORE=\"(${(j:|:)ignore})\";fc -W')+reload:fc -pa $HISTFILE; fc -rl 1 |
+#   awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, \"\", cmd); if (!seen[cmd]++) {printf \"%-10s\", $1; $1=\"\"; print $0} }' |
+#   bat --color=always --plain --language sh"
 # --bind "start:reload:fc -pa $HISTFILE; fc -rl 1 |
-# 	awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, \"\", cmd); if (!seen[cmd]++) {printf \"%-10s\", $1; $1=\"\"; print $0} }' |
-# 	bat --color=always --plain --language sh"
-# --header 'enter select · ^d remove'
+#   awk '{ cmd=$0; sub(/^[ \t]*[0-9]+\**[ \t]+/, \"\", cmd); if (!seen[cmd]++) {printf \"%-10s\", $1; $1=\"\"; print $0} }' |
+#   bat --color=always --plain --language sh"
+# --header 'enter select Â· ^d remove'
 # --height 70%
 # --preview-window 'hidden:down:border-top:wrap:<70(hidden)'
 # --preview 'bat --color=always --plain --language sh <<<{2..}'
